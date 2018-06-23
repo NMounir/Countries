@@ -24,6 +24,7 @@ class CityDetailsViewController: UIViewController {
             return
         }
         
+        //set the screen title to the current city
         self.title = city?.name
         
         //center the map on the city location otherwise set the default map center to Amsterdam coordinates
@@ -53,16 +54,4 @@ class CityDetailsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

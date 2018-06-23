@@ -14,6 +14,7 @@ class CityListViewController: UITableViewController {
     var filteredCities = [City]()
     let searchController = UISearchController(searchResultsController: nil)
     
+    // MARK: - View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchController()
@@ -114,12 +115,6 @@ class CityListViewController: UITableViewController {
 // MARK: - Filtering Handling
 extension CityListViewController {
     // MARK: - Search UI Setup
-    
-//    func configureTableView() {
-//        // Setup the search footer
-//        tableView.tableFooterView = searchFooter
-//    }
-    
     func setupSearchController(){
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
