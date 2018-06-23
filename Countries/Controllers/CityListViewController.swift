@@ -11,9 +11,12 @@ import UIKit
 class CityListViewController: UITableViewController {
     
     var sortedCities = [City]()
+    var filteredCities = [City]()
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSearchController()
         JsonParser(fileName: "cities")
     }
 
@@ -37,6 +40,9 @@ class CityListViewController: UITableViewController {
             let citiesList = try JSONDecoder().decode([City].self, from: data)
             sortedCities = citiesList.sorted{($0.name, $0.country) < ($1.name, $1.country)}
             
+            //initially setting up the filtered cities list equals to sorted cities list
+            filteredCities = sortedCities
+            
             //reload table after sorting the cities in alphabetical order
             tableView.reloadData()
             
@@ -52,21 +58,20 @@ class CityListViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedCities.count
+        
+        return filteredCities.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cityCell", for: indexPath)
 
         // Configure the cell...
-        let city = sortedCities[indexPath.row]
+        let city = filteredCities[indexPath.row]
         cell.textLabel?.text = city.name
         cell.detailTextLabel?.text = city.country
         return cell
     }
  
-
-
     /*
     // MARK: - Navigation
 
@@ -77,4 +82,46 @@ class CityListViewController: UITableViewController {
     }
     */
 
+}
+
+// MARK: - Filtering Handling
+extension CityListViewController {
+    // MARK: - Search UI Setup
+    func setupSearchController(){
+        // Setup the Search Controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Cities"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+     // MARK: - Search Helper
+    func isFiltering() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }
+    
+    // MARK: - Search Results
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterCitiesForSearchText(_ searchText: String, scope: String = "All") {
+        filteredCities = sortedCities.filter({( city : City) -> Bool in
+            return city.name.lowercased().hasPrefix(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+}
+
+extension CityListViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let typedText = searchController.searchBar.text  else {
+            return
+        }
+        //filter cities based on typed text
+        filterCitiesForSearchText(typedText)
+    }
 }
