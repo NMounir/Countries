@@ -8,12 +8,16 @@
 
 import Foundation
 
-struct City : Decodable {
-    let name : String?
-    let country : String?
-    let id : String?
+struct City : Decodable, CustomStringConvertible {
+    let name : String
+    let country : String
+    let id : Int?
     let coordinate : Coordinate?
     
+    var description: String {
+        return "\(self.name) \(self.country)"
+    }
+
     private enum CodingKeys : String, CodingKey {
         case id = "_id"
         case coordinate = "coord"
