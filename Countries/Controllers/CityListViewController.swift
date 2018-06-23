@@ -39,6 +39,7 @@ class CityListViewController: UITableViewController {
             let data = try Data(contentsOf: url)
             //decoding the json file into an array of cities
             let citiesList = try JSONDecoder().decode([City].self, from: data)
+            
             sortedCities = citiesList.sorted{($0.name, $0.country) < ($1.name, $1.country)}
             
             //initially setting up the filtered cities list equals to sorted cities list
@@ -101,11 +102,8 @@ class CityListViewController: UITableViewController {
                     city = sortedCities[indexPath.row]
                 }
                 //pass the selected city details to the details view
-                if let currentCity = city {
-                    if let detailsViewController = segue.destination as? CityDetailsViewController
-                    {
-                        detailsViewController.city = currentCity
-                    }
+                if let currentCity = city, let detailsViewController = segue.destination as? CityDetailsViewController{
+                    detailsViewController.city = currentCity
                 }
             }
         }
