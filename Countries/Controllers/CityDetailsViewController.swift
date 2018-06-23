@@ -17,7 +17,6 @@ class CityDetailsViewController: UIViewController {
             configureCityView()
         }
     }
-    
     func configureCityView() {
         
         if (!self.isViewLoaded) {
