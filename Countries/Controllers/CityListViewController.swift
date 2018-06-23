@@ -59,34 +59,67 @@ class CityListViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return filteredCities.count
+        if isFiltering(){
+            return filteredCities.count
+        }
+        return sortedCities.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cityCell", for: indexPath)
 
         // Configure the cell...
-        let city = filteredCities[indexPath.row]
-        cell.textLabel?.text = city.name
-        cell.detailTextLabel?.text = city.country
+        var city : City?
+        
+        if isFiltering() {
+            city = filteredCities[indexPath.row]
+        }else{
+            city = sortedCities[indexPath.row]
+        }
+        
+        if let currentCity = city {
+            cell.textLabel?.text = currentCity.name
+            cell.detailTextLabel?.text = currentCity.country
+        }
+        
         return cell
     }
  
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "showDetail" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                var city : City?
+                //get current selected city whether in the show all cities mode or filtered mode
+                if isFiltering() {
+                    city = filteredCities[indexPath.row]
+                }else{
+                    city = sortedCities[indexPath.row]
+                }
+                //pass the selected city details to the details view
+                if let currentCity = city {
+                    if let detailsViewController = segue.destination as? CityDetailsViewController
+                    {
+                        detailsViewController.city = currentCity
+                    }
+                }
+            }
+        }
     }
-    */
-
 }
 
 // MARK: - Filtering Handling
 extension CityListViewController {
     // MARK: - Search UI Setup
+    
+//    func configureTableView() {
+//        // Setup the search footer
+//        tableView.tableFooterView = searchFooter
+//    }
+    
     func setupSearchController(){
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
