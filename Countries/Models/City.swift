@@ -20,7 +20,6 @@ class City : NSObject, Decodable, MKAnnotation{
         self.country = country
         self.id = id
         self.coord = coordinate
-        
         super.init()
     }
     //To conform to protocol MKAnnotation, we need to define coordinate property along with title and subtitle
@@ -42,12 +41,22 @@ class City : NSObject, Decodable, MKAnnotation{
         case id = "_id"
         case name, country, coord
     }
+    
+    //Define an equality function to compare between 2 cities
+    static func ==(lhs: City, rhs: City) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 struct Coordinate : Decodable{
     
     let latitude : Double?
     let longitude : Double?
+    
+    init(latitude: Double, longitude: Double) {
+        self.latitude = latitude
+        self.longitude = longitude
+    }
     
     private enum CodingKeys : String, CodingKey {
         case latitude = "lat"

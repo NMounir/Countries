@@ -133,11 +133,11 @@ extension CityListViewController {
         return searchController.searchBar.text?.isEmpty ?? true
     }
     
-    func filterCitiesForSearchText(_ searchText: String, scope: String = "All") {
-        filteredCities = sortedCities.filter({( city : City) -> Bool in
-            return city.name.lowercased().hasPrefix(searchText.lowercased())
-        })
-        tableView.reloadData()
+    func filterCitiesForSearchText(_ searchText: String, _ cityList: [City]) -> [City] {
+        let cities = cityList.filter{
+            $0.name.lowercased().hasPrefix(searchText.lowercased())
+        }
+        return cities
     }
 }
 
@@ -148,6 +148,7 @@ extension CityListViewController: UISearchResultsUpdating {
             return
         }
         //filter cities based on typed text
-        filterCitiesForSearchText(typedText)
+        filteredCities = filterCitiesForSearchText(typedText, sortedCities)
+        tableView.reloadData()
     }
 }
