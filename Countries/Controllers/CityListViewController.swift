@@ -20,11 +20,6 @@ class CityListViewController: UITableViewController {
         setupSearchController()
         JsonParser(fileName: "cities")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     // MARK: - JSON Handling
     fileprivate func JsonParser(fileName:String){
@@ -83,7 +78,6 @@ class CityListViewController: UITableViewController {
             cell.textLabel?.text = currentCity.name
             cell.detailTextLabel?.text = currentCity.country
         }
-        
         return cell
     }
  
